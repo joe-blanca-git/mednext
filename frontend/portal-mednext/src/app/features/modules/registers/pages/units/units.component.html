@@ -1,0 +1,219 @@
+<div class="container-fluid px-4 py-4">
+  
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4 animate-fade-in">
+    <div>
+      <h3 class="fw-bold mb-0 text-dark">Unidades</h3>
+      <p class="text-muted mb-0">Gerencie todas as unidades cadastradas no sistema.</p>
+    </div>
+    <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#unitModal" (click)="openNewModal()">
+      <i class="bi bi-plus-lg me-2"></i> Nova Unidade
+    </button>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="card border-0 shadow-sm rounded-4 mb-4 animate-fade-in" style="animation-delay: 0.1s;">
+    <div class="card-body p-3">
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6">
+          <div class="input-group input-group-lg">
+            <input type="text" class="form-control border-end-0" placeholder="Pesquisar por nome ou cidade..." [(ngModel)]="searchTerm" (ngModelChange)="search()">
+            <span class="input-group-text bg-white border-start-0" (click)="searchTerm ? clearSearch() : null" [style.cursor]="searchTerm ? 'pointer' : 'default'">
+              <i class="bi" [ngClass]="searchTerm ? 'bi-x-lg text-danger' : 'bi-search text-muted'"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card hover-card border-0 rounded-4 animate-fade-in" style="animation-delay: 0.2s;">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="border-0 rounded-start text-muted fw-semibold ps-4 py-3">Nome</th>
+              <th class="border-0 text-muted fw-semibold py-3">Cidade</th>
+              <th class="border-0 text-muted fw-semibold py-3">Estado</th>
+              <th class="border-0 text-muted fw-semibold py-3">Endereço</th>
+              <th class="border-0 text-muted fw-semibold py-3 text-center">Locais</th>
+              <th class="border-0 text-muted fw-semibold py-3 text-center">Status</th>
+              <th class="border-0 rounded-end text-muted fw-semibold py-3 text-end pe-4">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let unit of filteredUnits">
+              <td class="fw-semibold text-dark ps-4">{{unit.name}}</td>
+              <td class="text-muted">{{unit.city}}</td>
+              <td class="text-muted">{{unit.state}}</td>
+              <td class="text-muted">{{unit.street}}, {{unit.number}}</td>
+              <td class="text-center">
+                <span class="badge bg-secondary-subtle text-secondary rounded-pill px-2">{{unit.locations.length}}</span>
+              </td>
+              <td class="text-center">
+                <span class="badge rounded-pill px-3 py-2" [ngClass]="unit.active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'">
+                  {{unit.active ? 'Ativo' : 'Inativo'}}
+                </span>
+              </td>
+              <td class="text-end pe-4">
+                <button class="btn btn-sm btn-light text-primary me-2 rounded-circle shadow-sm" title="Editar" data-bs-toggle="modal" data-bs-target="#unitModal" (click)="openEditModal(unit)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-light text-danger rounded-circle shadow-sm" title="Excluir" data-bs-toggle="modal" data-bs-target="#deleteModal" (click)="openDeleteModal(unit)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="filteredUnits.length === 0">
+              <td colspan="7" class="text-center py-5 text-muted">Nenhuma unidade encontrada.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Unit Modal -->
+<div class="modal fade" id="unitModal" tabindex="-1" aria-hidden="true" *ngIf="selectedUnit">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold">{{selectedUnit.id === 0 ? 'Nova Unidade' : 'Editar Unidade'}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <form>
+          <div class="row g-3">
+            <!-- Basic Info -->
+            <div class="col-md-8">
+              <label class="form-label text-muted small fw-semibold mb-1">Nome</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="selectedUnit.name" name="name">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-muted small fw-semibold mb-1">Status</label>
+              <select class="form-select rounded-3" [(ngModel)]="selectedUnit.active" name="active">
+                <option [ngValue]="true">Ativo</option>
+                <option [ngValue]="false">Inativo</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label text-muted small fw-semibold mb-1">Descrição</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="selectedUnit.description" name="desc">
+            </div>
+            
+            <!-- Address -->
+            <h6 class="fw-bold mt-4 mb-2 text-dark">Endereço</h6>
+            <div class="col-md-4">
+              <label class="form-label text-muted small fw-semibold mb-1">CEP</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="selectedUnit.zipCode" name="zip">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-muted small fw-semibold mb-1">Cidade</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="selectedUnit.city" name="city">
+            </div>
+            <div class="col-md-2">
+              <label class="form-label text-muted small fw-semibold mb-1">Estado</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="selectedUnit.state" name="state">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-muted small fw-semibold mb-1">Bairro</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="selectedUnit.neighborhood" name="neighborhood">
+            </div>
+            <div class="col-md-5">
+              <label class="form-label text-muted small fw-semibold mb-1">Rua</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="selectedUnit.street" name="street">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label text-muted small fw-semibold mb-1">Número</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="selectedUnit.number" name="number">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-muted small fw-semibold mb-1">Complemento</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="selectedUnit.complement" name="complement">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label text-muted small fw-semibold mb-1">Telefone</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="selectedUnit.phone" name="phone">
+            </div>
+          </div>
+        </form>
+
+        <hr class="my-4">
+
+        <!-- Locations -->
+        <h6 class="fw-bold mb-3 text-dark d-flex justify-content-between align-items-center">
+          Locais da Unidade
+        </h6>
+        
+        <div class="row g-2 mb-3 align-items-end">
+          <div class="col-md-5">
+            <label class="form-label text-muted small fw-semibold mb-1">Nome do Local</label>
+            <input type="text" class="form-control rounded-3 form-control-sm" [(ngModel)]="newLocation.name" name="locName">
+          </div>
+          <div class="col-md-5">
+            <label class="form-label text-muted small fw-semibold mb-1">Descrição</label>
+            <input type="text" class="form-control rounded-3 form-control-sm" [(ngModel)]="newLocation.description" name="locDesc">
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-outline-primary btn-sm w-100 rounded-3" (click)="addLocation()">Adicionar</button>
+          </div>
+        </div>
+
+        <div class="table-responsive border rounded-3">
+          <table class="table table-sm table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="text-muted fw-semibold ps-3">Nome</th>
+                <th class="text-muted fw-semibold">Descrição</th>
+                <th class="text-muted fw-semibold text-end pe-3">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let loc of selectedUnit.locations">
+                <td class="ps-3">{{loc.name}}</td>
+                <td>{{loc.description}}</td>
+                <td class="text-end pe-3">
+                  <button class="btn btn-sm text-danger p-0" title="Excluir Local" (click)="removeLocation(loc.id)">
+                    <i class="bi bi-x-circle-fill"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="selectedUnit.locations.length === 0">
+                <td colspan="3" class="text-center py-3 text-muted small">Nenhum local adicionado.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+      <div class="modal-footer border-top-0 pt-0">
+        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary rounded-pill px-4" data-bs-dismiss="modal" (click)="saveUnit()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true" *ngIf="selectedUnit">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <div class="modal-body text-center p-4">
+        <div class="mb-3">
+          <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
+        </div>
+        <h5 class="fw-bold text-dark mb-3">Excluir Unidade</h5>
+        <p class="text-muted mb-4">Tem certeza que deseja excluir a unidade <strong>{{selectedUnit.name}}</strong>? Esta ação não poderá ser desfeita.</p>
+        <div class="d-flex justify-content-center gap-3">
+          <button type="button" class="btn btn-light rounded-pill px-4 w-50" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger rounded-pill px-4 w-50" data-bs-dismiss="modal" (click)="deleteUnit()">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,124 @@
+
+<!-- Main Container -->
+<div class="container-fluid px-4 py-4">
+  
+  <!-- Greeting -->
+  <div class="row mb-4 animate-fade-in">
+    <div class="col-12">
+      <h3 class="fw-bold mb-0 text-dark">Bom dia, {{userName}}.</h3>
+      <p class="text-muted">Bem-vindo ao MedNext.</p>
+    </div>
+  </div>
+
+  <!-- Key Metrics -->
+  <div class="row g-4 mb-4">
+    <div class="col-12 col-md-6 col-xl-3 animate-fade-in" style="animation-delay: 0.1s;" *ngFor="let item of indicators">
+      <div class="card hover-card h-100 p-3 rounded-4">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div>
+            <h6 class="text-muted fw-semibold mb-1">{{item.title}}</h6>
+            <h2 class="fw-bold mb-0 text-dark">{{item.value}}</h2>
+          </div>
+          <div class="icon-box {{item.bgClass}} {{item.colorClass}}">
+            <i class="bi {{item.icon}}"></i>
+          </div>
+        </div>
+        <p class="text-muted small mb-0 mt-auto">{{item.description}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Units Summary Table -->
+    <div class="col-12 col-xl-8 animate-fade-in" style="animation-delay: 0.2s;">
+      <div class="card hover-card rounded-4 p-4 h-100">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h5 class="fw-bold mb-0 text-dark">Resumo por Unidade</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="border-0 rounded-start text-muted fw-semibold">Unidade</th>
+                <th class="border-0 text-muted fw-semibold">Geradas</th>
+                <th class="border-0 text-muted fw-semibold">Atendidas</th>
+                <th class="border-0 text-muted fw-semibold">Aguardando</th>
+                <th class="border-0 rounded-end text-muted fw-semibold">Tempo Médio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let unit of unitSummary">
+                <td class="fw-semibold text-dark">{{unit.name}}</td>
+                <td><span class="badge bg-primary-subtle text-primary rounded-pill px-2">{{unit.generated}}</span></td>
+                <td><span class="badge bg-success-subtle text-success rounded-pill px-2">{{unit.attended}}</span></td>
+                <td>
+                  <span class="badge rounded-pill px-2" [ngClass]="unit.waiting > 5 ? 'bg-danger-subtle text-danger' : 'bg-warning-subtle text-warning'">
+                    {{unit.waiting}}
+                  </span>
+                </td>
+                <td class="text-muted"><i class="bi bi-clock me-1"></i> {{unit.avgTime}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Access -->
+    <div class="col-12 col-xl-4 animate-fade-in" style="animation-delay: 0.3s;">
+      <h5 class="fw-bold mb-4 text-dark">Acesso Rápido</h5>
+      <div class="row g-3">
+        <div class="col-6" *ngFor="let quick of quickAccess">
+          <div class="card hover-card quick-access-card h-100 rounded-4" style="cursor: pointer;" (click)="handleQuickAccess(quick)">
+            <div class="card-body justify-content-center">
+              <i class="bi {{quick.icon}}"></i>
+              <h6 class="fw-bold mb-1 text-dark">{{quick.name}}</h6>
+              <p class="text-muted small mb-0">{{quick.description}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Panel Configuration Modal -->
+<div class="modal fade show" tabindex="-1" *ngIf="showPanelModal" style="display: block; background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold">Configurar Painel</h5>
+        <button type="button" class="btn-close" (click)="closePanelModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted small mb-3">Selecione a Unidade e o Local para iniciar o painel de chamadas.</p>
+        <form>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label text-muted small fw-semibold mb-1">Unidade</label>
+              <select class="form-select rounded-3" [(ngModel)]="selectedUnit" name="unit">
+                <option value="" disabled selected>Selecione uma unidade...</option>
+                <option *ngFor="let u of unitSummary" [value]="u.name">{{u.name}}</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label text-muted small fw-semibold mb-1">Local (Setor/Recepção)</label>
+              <select class="form-select rounded-3" [(ngModel)]="selectedLocation" name="location">
+                <option value="" disabled selected>Selecione um local...</option>
+                <option value="Recepção Principal">Recepção Principal</option>
+                <option value="Triagem">Triagem</option>
+                <option value="Consultórios">Consultórios</option>
+                <option value="Laboratório">Laboratório</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0 pt-0">
+        <button type="button" class="btn btn-light rounded-pill px-4 w-100 mb-2" (click)="closePanelModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary rounded-pill px-4 w-100 m-0" (click)="openPanel()" [disabled]="!selectedUnit || !selectedLocation">Iniciar Painel</button>
+      </div>
+    </div>
+  </div>
+</div>

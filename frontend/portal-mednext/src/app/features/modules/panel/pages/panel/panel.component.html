@@ -1,0 +1,102 @@
+<div class="panel-container d-flex flex-column bg-light vh-100 overflow-hidden">
+  
+  <!-- Header -->
+  <header class="panel-header text-white px-4 py-3 d-flex justify-content-between align-items-center shadow-sm">
+    <div class="d-flex align-items-center gap-3">
+      <i class="bi bi-display fs-2"></i>
+      <h1 class="m-0 fs-1 fw-bold tracking-tight">{{ clinicName }}</h1>
+    </div>
+    <div class="text-end">
+      <div class="fs-4 fw-medium text-white-50">{{ currentTime | date:'dd/MM/yyyy' }}</div>
+      <div class="fs-1 fw-bold lh-1 clock-time">{{ currentTime | date:'HH:mm:ss' }}</div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow-1 container-fluid p-4 d-flex flex-column">
+    <div class="row g-4 flex-grow-1">
+      
+      <!-- Próxima Chamada (Destaque) -->
+      <div class="col-12 col-xl-7 d-flex flex-column">
+        <h2 class="text-muted text-uppercase fw-bold mb-3 fs-3">Próxima Chamada</h2>
+        
+        <div *ngIf="currentCall$ | async as currentCall; else noCall" 
+             class="card border-0 shadow-lg flex-grow-1 d-flex flex-column justify-content-center align-items-center position-relative overflow-hidden current-call-card"
+             [ngClass]="{'calling-animation': isCalling}">
+             
+          <!-- Indicador de voz simulado -->
+          <span *ngIf="isCalling" class="badge bg-danger rounded-pill position-absolute top-0 start-0 m-4 fs-3 px-4 py-2 pulse-badge">
+            <i class="bi bi-volume-up-fill me-2"></i> Chamando...
+          </span>
+
+          <div class="category-badge mb-4 px-4 py-2 rounded-pill fs-3 fw-bold text-white shadow-sm" [ngClass]="'bg-' + currentCall.category.color">
+            {{ currentCall.category.name }}
+          </div>
+          
+          <div class="ticket-number text-primary fw-bolder lh-1 text-center">
+            {{ currentCall.number }}
+          </div>
+          
+          <div class="destination-text text-dark fw-bold text-uppercase mt-4 text-center">
+            <i class="bi bi-geo-alt-fill text-primary me-2"></i>
+            {{ currentCall.destination }}
+          </div>
+        </div>
+        
+        <ng-template #noCall>
+          <div class="card border-0 shadow flex-grow-1 d-flex justify-content-center align-items-center text-muted fs-2">
+            Aguardando próxima chamada...
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Listas Laterais -->
+      <div class="col-12 col-xl-5 d-flex flex-column">
+        <div class="row g-4 flex-grow-1">
+          
+          <!-- Últimas Chamadas -->
+          <div class="col-6 d-flex flex-column h-100">
+            <h2 class="text-muted text-uppercase fw-bold mb-3 fs-4">Últimas Chamadas</h2>
+            <div class="card border-0 shadow-sm flex-grow-1 overflow-hidden">
+              <div class="list-group list-group-flush h-100 last-calls-list">
+                <div *ngFor="let ticket of lastCalled$ | async" class="list-group-item py-3 px-4 border-bottom">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="fs-2 fw-bolder text-dark">{{ ticket.number }}</span>
+                    <span class="badge bg-light text-dark border fs-6">{{ ticket.timeCalled | date:'HH:mm' }}</span>
+                  </div>
+                  <div class="fs-4 text-muted fw-medium">{{ ticket.destination }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Aguardando -->
+          <div class="col-6 d-flex flex-column h-100">
+            <h2 class="text-muted text-uppercase fw-bold mb-3 fs-4">Aguardando</h2>
+            <div class="card border-0 shadow-sm flex-grow-1 overflow-hidden bg-white">
+              <div class="list-group list-group-flush h-100 waiting-list">
+                <div *ngFor="let ticket of waiting$ | async" class="list-group-item py-3 px-4 border-bottom bg-transparent">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="fs-3 fw-bold text-secondary" style="width: 90px">{{ ticket.number }}</div>
+                    <span class="badge rounded-pill fs-6 px-3" [ngClass]="'bg-' + ticket.category.color + ' bg-opacity-10 text-' + ticket.category.color">
+                      {{ ticket.category.name }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="panel-footer bg-white text-center py-3 border-top shadow-sm">
+    <p class="m-0 fs-3 text-secondary fw-medium">
+      <i class="bi bi-info-circle-fill text-primary me-2"></i>
+      Bem-vindo à Clínica MedNext. Por favor, aguarde sua senha ser chamada no painel.
+    </p>
+  </footer>
+</div>

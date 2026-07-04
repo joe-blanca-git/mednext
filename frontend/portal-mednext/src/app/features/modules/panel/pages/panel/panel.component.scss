@@ -1,0 +1,82 @@
+.panel-container {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  .panel-header {
+    background-color: #0f172a; // Slate 900 for high contrast header
+    
+    .clock-time {
+      font-variant-numeric: tabular-nums; // Keeps clock width stable
+      letter-spacing: -1px;
+    }
+  }
+
+  // Giant text for the main ticket
+  .ticket-number {
+    font-size: 15rem; // Extremely large for distant reading
+    letter-spacing: -4px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .destination-text {
+    font-size: 4rem;
+    letter-spacing: -1px;
+  }
+
+  .current-call-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 4px solid transparent !important;
+  }
+
+  // Animation when a new ticket is called
+  .calling-animation {
+    animation: highlight-pulse 2s ease-in-out infinite;
+    border-color: var(--bs-primary) !important;
+    transform: scale(1.02);
+    box-shadow: 0 20px 50px rgba(var(--bs-primary-rgb), 0.2) !important;
+  }
+
+  .pulse-badge {
+    animation: badge-pulse 1.5s infinite;
+  }
+
+  // Fix list heights and remove scrollbars for a clean TV look
+  .last-calls-list, .waiting-list {
+    overflow: hidden; // We rely on slicing the array in TS, not scrolling on a TV!
+    
+    .list-group-item {
+      transition: background-color 0.3s ease;
+    }
+  }
+
+  .panel-footer {
+    background-color: #f8fafc;
+  }
+}
+
+// Keyframes for visual feedback
+@keyframes highlight-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(var(--bs-primary-rgb), 0.4); }
+  70% { box-shadow: 0 0 0 30px rgba(var(--bs-primary-rgb), 0); }
+  100% { box-shadow: 0 0 0 0 rgba(var(--bs-primary-rgb), 0); }
+}
+
+@keyframes badge-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+// Responsive adjustments (just in case it's on a smaller screen)
+@media (max-width: 1400px) {
+  .panel-container {
+    .ticket-number { font-size: 10rem; }
+    .destination-text { font-size: 3rem; }
+  }
+}
+
+@media (max-width: 992px) {
+  .panel-container {
+    .ticket-number { font-size: 7rem; }
+    .destination-text { font-size: 2rem; }
+  }
+}

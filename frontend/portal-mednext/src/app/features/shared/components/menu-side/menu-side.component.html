@@ -1,0 +1,26 @@
+<ng-container *ngFor="let item of menu">
+  <!-- Menu Principal -->
+  <div class="menu-nav-item d-flex align-items-center py-2 px-3 my-1 mx-2 rounded-3 cursor-pointer transition"
+       [class.collapsed-item]="sidebarCollapsed"
+       (click)="(!item.submenus || item.submenus.length === 0) ? navigateToMenu(item) : toggleMenu(item)"
+       [routerLink]="(!item.submenus || item.submenus.length === 0) ? '/' + getRoute(item) : null"
+       [routerLinkActive]="(!item.submenus || item.submenus.length === 0) ? 'active-menu shadow-sm' : ''"
+       [routerLinkActiveOptions]="{exact: false}">
+    <div class="menu-icon-container text-center">
+      <i class="fs-5" [ngClass]="item.icon"></i>
+    </div>
+    <span class="menu-nav-text ms-3 fw-medium flex-grow-1" *ngIf="!sidebarCollapsed">{{item.menuName}}</span>
+    <i class="fas fs-6 ms-2 text-muted" [ngClass]="item.expanded ? 'fa-chevron-down' : 'fa-chevron-right'" *ngIf="!sidebarCollapsed && item.submenus && item.submenus.length > 0"></i>
+  </div>
+
+  <!-- Submenus -->
+  <div class="submenu-container ps-4 pe-2 mb-2" *ngIf="!sidebarCollapsed && item.expanded && item.submenus && item.submenus.length > 0">
+    <a *ngFor="let sub of item.submenus" 
+       class="menu-nav-item d-flex align-items-center py-2 px-3 my-1 rounded-3 cursor-pointer transition text-decoration-none" 
+       (click)="setActiveTab(sub.route)"
+       [routerLink]="'/' + sub.route"
+       routerLinkActive="active-menu shadow-sm">
+      <span class="menu-nav-text fw-medium" style="font-size: 0.9em;">{{sub.submenuName}}</span>
+    </a>
+  </div>
+</ng-container>

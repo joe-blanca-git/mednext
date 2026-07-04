@@ -1,0 +1,18 @@
+@import './custom-theme/bg-colors.scss';
+@import './custom-theme/theme.scss';
+
+// Global Contrast Adjustments
+body {
+  background-color: #F5F7FA;
+  color: #334155; // Softer, more corporate dark gray
+}
+
+// Enhance shadow for depth perception on all cards
+.card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid rgba(0,0,0, 0.03) !important;
+}
+
+.modal-content, .offcanvas {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08) !important;
+}

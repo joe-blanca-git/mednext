@@ -1,0 +1,103 @@
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+// Cards
+.hover-card, .ticket-card {
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02) !important;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important;
+  }
+}
+
+.icon-box {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 1.5rem;
+}
+
+// Kanban Columns
+.kanban-board {
+  min-height: 60vh;
+}
+
+.kanban-column {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 250px); /* Ajuste dinâmico dependendo da tela */
+  
+  /* Esconder scrollbars em Webkit */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 10px;
+  }
+}
+
+// Timeline
+.timeline {
+  position: relative;
+  padding-left: 30px;
+  list-style: none;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+  }
+  
+  .timeline-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    .timeline-icon {
+      position: absolute;
+      left: -30px;
+      width: 30px;
+      height: 30px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-width: 2px;
+      border-style: solid;
+      z-index: 1;
+      font-size: 0.85rem;
+    }
+    
+    .timeline-content {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      border: 1px solid #f1f3f5;
+    }
+  }
+}
