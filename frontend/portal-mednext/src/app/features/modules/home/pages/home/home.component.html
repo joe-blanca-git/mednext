@@ -122,3 +122,42 @@
     </div>
   </div>
 </div>
+
+<!-- Totem Configuration Modal -->
+<div class="modal fade show" tabindex="-1" *ngIf="showTotemModal" style="display: block; background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h5 class="modal-title fw-bold">Configurar Totem</h5>
+        <button type="button" class="btn-close" (click)="closeTotemModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted small mb-3">Selecione a Unidade e o Local para iniciar o totem de autoatendimento.</p>
+        <form>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label text-muted small fw-semibold mb-1">Unidade</label>
+              <select class="form-select rounded-3" [(ngModel)]="totemUnit" name="totemUnit">
+                <option value="" disabled selected>Selecione uma unidade...</option>
+                <option *ngFor="let u of unitSummary" [value]="u.name">{{u.name}}</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label text-muted small fw-semibold mb-1">Local</label>
+              <select class="form-select rounded-3" [(ngModel)]="totemLocation" name="totemLocation">
+                <option value="" disabled selected>Selecione um local...</option>
+                <option value="Recepção Principal">Recepção Principal</option>
+                <option value="Triagem">Triagem</option>
+                <option value="Entrada Secundária">Entrada Secundária</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0 pt-0">
+        <button type="button" class="btn btn-light rounded-pill px-4 w-100 mb-2" (click)="closeTotemModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary rounded-pill px-4 w-100 m-0" (click)="openTotem()" [disabled]="!totemUnit || !totemLocation">Iniciar Totem</button>
+      </div>
+    </div>
+  </div>
+</div>

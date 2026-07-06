@@ -8,4 +8,5 @@ export interface IUser {
   vacationStart?: string;
   vacationEnd?: string;
   lastAccess: string;
+  unit?: string;
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
@@ -17,6 +17,10 @@ export class HomeComponent {
   showPanelModal = false;
   selectedUnit = '';
   selectedLocation = '';
+
+  showTotemModal = false;
+  totemUnit = '';
+  totemLocation = '';
 
   indicators = [
     { title: 'Senhas Geradas Hoje', value: 128, description: '+12% em relação a ontem', icon: 'bi-ticket-perforated', colorClass: 'text-primary', bgClass: 'bg-primary-subtle' },
@@ -36,16 +40,20 @@ export class HomeComponent {
     { name: 'Unidades', description: 'Gerenciar unidades e setores', icon: 'bi-building', route: '/registers/units' },
     { name: 'Usuários', description: 'Controle de acessos e perfis', icon: 'bi-people', route: '/registers/users' },
     { name: 'Atendimento', description: 'Iniciar ou gerenciar filas', icon: 'bi-headset', route: '/attendance' },
-    { name: 'Painel', description: 'Visualizar painel de chamadas', icon: 'bi-display', action: 'panelModal' }
+    { name: 'Painel', description: 'Visualizar painel de chamadas', icon: 'bi-display', action: 'panelModal' },
+    { name: 'Histórico', description: 'Relatório de chamadas', icon: 'bi-clock-history', route: '/history' },
+    { name: 'Iniciar Totem', description: 'Autoatendimento', icon: 'bi-tablet', action: 'totemModal' }
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private location: Location) {}
 
   handleQuickAccess(quick: any) {
     if (quick.route) {
       this.router.navigate([quick.route]);
     } else if (quick.action === 'panelModal') {
       this.showPanelModal = true;
+    } else if (quick.action === 'totemModal') {
+      this.showTotemModal = true;
     }
   }
 
@@ -56,13 +64,36 @@ export class HomeComponent {
   }
 
   openPanel() {
-    // Navigate passing the selected values (can be query parameters in the future if needed)
     this.showPanelModal = false;
-    this.router.navigate(['/panel'], {
+    const urlTree = this.router.createUrlTree(['/panel'], {
       queryParams: {
         unit: this.selectedUnit,
         location: this.selectedLocation
       }
     });
+    
+    // Ensure the baseHref (/portal-next/) is appended correctly
+    const finalUrl = this.location.prepareExternalUrl(this.router.serializeUrl(urlTree));
+    
+    // Open in a completely new window (not just a new tab) by specifying window features
+    window.open(finalUrl, '_blank', 'width=1280,height=720,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
+  }
+
+  closeTotemModal() {
+    this.showTotemModal = false;
+    this.totemUnit = '';
+    this.totemLocation = '';
+  }
+
+  openTotem() {
+    this.showTotemModal = false;
+    const urlTree = this.router.createUrlTree(['/totem'], {
+      queryParams: {
+        unit: this.totemUnit,
+        location: this.totemLocation
+      }
+    });
+    const finalUrl = this.location.prepareExternalUrl(this.router.serializeUrl(urlTree));
+    window.open(finalUrl, '_blank', 'width=1024,height=768,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
   }
 }

@@ -1,0 +1,171 @@
+<div class="totem-wrapper vh-100 d-flex flex-column bg-light-modern overflow-hidden">
+  
+  <!-- Header / Stepper -->
+  <header class="bg-white shadow-sm py-4 px-5 d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-3">
+      <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+        <i class="bi bi-hospital fs-3"></i>
+      </div>
+      <h2 class="fw-bold text-dark mb-0 tracking-tight">MedNext</h2>
+    </div>
+    
+    <!-- Stepper Indicator -->
+    <div class="d-flex align-items-center gap-2" *ngIf="currentStep < 4">
+      <div class="step-indicator" [class.active]="currentStep >= 1">1</div>
+      <div class="step-line" [class.active]="currentStep >= 2"></div>
+      <div class="step-indicator" [class.active]="currentStep >= 2">2</div>
+      <div class="step-line" [class.active]="currentStep >= 3"></div>
+      <div class="step-indicator" [class.active]="currentStep >= 3">3</div>
+    </div>
+    
+    <div *ngIf="currentStep === 4" class="text-success fw-bold fs-4 d-flex align-items-center gap-2">
+      <i class="bi bi-check-circle-fill"></i> Concluído
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-grow-1 d-flex align-items-center justify-content-center position-relative p-5">
+    
+    <!-- Step 1: Tipo de Atendimento -->
+    <div class="container animate-fade-in" *ngIf="currentStep === 1">
+      <div class="text-center mb-5 pb-3">
+        <h1 class="display-3 fw-bolder text-dark mb-3">Bem-vindo ao MedNext</h1>
+        <h2 class="text-muted fw-normal">Deseja atendimento convencional ou prioritário?</h2>
+      </div>
+
+      <div class="row g-5 justify-content-center max-w-1200 mx-auto">
+        <div class="col-12 col-md-6" *ngFor="let type of ticketTypes">
+          <div class="card totem-card h-100 border-0 rounded-5 shadow-lg cursor-pointer text-center p-5" (click)="selectType(type)">
+            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+              <i class="bi {{type.icon}} display-1 {{type.colorClass}} mb-4"></i>
+              <h2 class="fw-bold text-dark mb-4">{{type.name}}</h2>
+              <p class="fs-4 text-muted mb-5">{{type.description}}</p>
+              <button class="btn btn-primary btn-lg rounded-pill py-3 px-5 fs-4 w-100 fw-semibold mt-auto totem-btn">
+                Selecionar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Serviços -->
+    <div class="container animate-fade-in" *ngIf="currentStep === 2">
+      <div class="text-center mb-5">
+        <h1 class="display-4 fw-bolder text-dark mb-2">Como podemos ajudá-lo hoje?</h1>
+        <p class="fs-4 text-muted">Selecione o serviço desejado</p>
+      </div>
+
+      <div class="row g-4 justify-content-center max-w-1200 mx-auto">
+        <div class="col-12 col-md-6 col-xl-4" *ngFor="let srv of services">
+          <div class="card totem-card h-100 border-0 rounded-4 shadow-sm cursor-pointer p-4" (click)="selectService(srv)">
+            <div class="card-body d-flex flex-column">
+              <div class="d-flex align-items-center gap-4 mb-3">
+                <div class="bg-primary-subtle text-primary rounded-4 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                  <i class="bi {{srv.icon}} display-5"></i>
+                </div>
+                <h3 class="fw-bold text-dark mb-0">{{srv.name}}</h3>
+              </div>
+              <p class="fs-5 text-muted mb-0">{{srv.description}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Resumo -->
+    <div class="container animate-fade-in" *ngIf="currentStep === 3">
+      <div class="text-center mb-5">
+        <h1 class="display-4 fw-bolder text-dark mb-2">Confira seus dados</h1>
+        <p class="fs-4 text-muted">Confira as informações antes de emitir sua senha.</p>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 col-xl-6">
+          <div class="card border-0 rounded-5 shadow-lg overflow-hidden">
+            <div class="bg-primary text-white p-4 text-center">
+              <h3 class="fw-bold mb-0">Resumo do Atendimento</h3>
+            </div>
+            <div class="card-body p-5">
+              
+              <div class="mb-4">
+                <h5 class="text-muted text-uppercase fw-bold mb-2">Tipo de Atendimento</h5>
+                <h2 class="fw-bolder text-dark d-flex align-items-center gap-3">
+                  <i class="bi {{selectedType?.icon}} {{selectedType?.colorClass}}"></i>
+                  {{selectedType?.name}}
+                </h2>
+              </div>
+              
+              <hr class="text-muted opacity-25 my-4">
+              
+              <div class="mb-4">
+                <h5 class="text-muted text-uppercase fw-bold mb-2">Serviço Escolhido</h5>
+                <h2 class="fw-bolder text-dark d-flex align-items-center gap-3">
+                  <i class="bi {{selectedService?.icon}} text-primary"></i>
+                  {{selectedService?.name}}
+                </h2>
+              </div>
+
+              <hr class="text-muted opacity-25 my-4">
+
+              <div class="row g-4 text-center bg-light rounded-4 p-4">
+                <div class="col-4">
+                  <h6 class="text-muted fw-bold mb-1">Unidade</h6>
+                  <h5 class="text-dark fw-bold mb-0">{{unitName}}</h5>
+                </div>
+                <div class="col-4 border-start">
+                  <h6 class="text-muted fw-bold mb-1">Data</h6>
+                  <h5 class="text-dark fw-bold mb-0">{{currentDate}}</h5>
+                </div>
+                <div class="col-4 border-start">
+                  <h6 class="text-muted fw-bold mb-1">Hora</h6>
+                  <h5 class="text-dark fw-bold mb-0">{{currentTime}}</h5>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          
+          <div class="d-flex flex-column mt-5 gap-4">
+            <button class="btn btn-primary btn-lg rounded-pill py-4 fs-3 fw-bold shadow-sm d-flex justify-content-center align-items-center gap-3 totem-btn" (click)="printTicket()" [disabled]="isProcessing">
+              <span *ngIf="!isProcessing"><i class="bi bi-printer"></i> Imprimir Senha</span>
+              <span *ngIf="isProcessing">
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Processando...
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Final / Success -->
+    <div class="container animate-fade-in text-center" *ngIf="currentStep === 4">
+      <div class="mb-5">
+        <div class="d-inline-flex align-items-center justify-content-center bg-success text-white rounded-circle mb-4" style="width: 120px; height: 120px;">
+          <i class="bi bi-check-lg" style="font-size: 5rem;"></i>
+        </div>
+        <h1 class="display-2 fw-bolder text-dark mb-2">Senha Emitida</h1>
+        <p class="fs-3 text-muted">Aguarde sua senha ser chamada no painel eletrônico.</p>
+      </div>
+
+      <div class="card border-0 rounded-5 shadow-lg d-inline-block mx-auto mb-5" style="min-width: 400px;">
+        <div class="card-body p-5">
+          <h5 class="text-muted text-uppercase fw-bold mb-3">{{generatedTicket?.type}}</h5>
+          <h1 class="fw-black text-dark m-0 ticket-number">{{generatedTicket?.number}}</h1>
+          <hr class="my-4 text-muted">
+          <p class="fs-4 text-dark fw-semibold mb-0">{{generatedTicket?.service}}</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Global Navigation / Footer -->
+  <footer class="p-5" *ngIf="currentStep > 1 && currentStep < 4">
+    <button class="btn btn-outline-secondary btn-lg rounded-pill py-3 px-5 fs-4 fw-semibold d-flex align-items-center gap-2 totem-btn" (click)="prevStep()" [disabled]="isProcessing">
+      <i class="bi bi-arrow-left"></i> Voltar
+    </button>
+  </footer>
+
+</div>

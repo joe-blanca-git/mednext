@@ -1,11 +1,7 @@
 <div class="container-fluid px-4 py-4">
   
-  <!-- Header -->
-  <div class="d-flex justify-content-between align-items-center mb-4 animate-fade-in">
-    <div>
-      <h3 class="fw-bold mb-0 text-dark">Usuários</h3>
-      <p class="text-muted mb-0">Gerencie os usuários com acesso ao sistema.</p>
-    </div>
+  <!-- Header Actions -->
+  <div class="d-flex justify-content-end align-items-center mb-4 animate-fade-in">
     <button class="btn btn-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#userModal" (click)="openNewModal()">
       <i class="bi bi-person-plus-fill me-2"></i> Novo Usuário
     </button>
@@ -37,6 +33,7 @@
               <th class="border-0 rounded-start text-muted fw-semibold ps-4 py-3">Nome</th>
               <th class="border-0 text-muted fw-semibold py-3">E-mail</th>
               <th class="border-0 text-muted fw-semibold py-3">Matrícula</th>
+              <th class="border-0 text-muted fw-semibold py-3">Unidade</th>
               <th class="border-0 text-muted fw-semibold py-3 text-center">Férias</th>
               <th class="border-0 text-muted fw-semibold py-3 text-center">Último Acesso</th>
               <th class="border-0 text-muted fw-semibold py-3 text-center">Status</th>
@@ -48,6 +45,7 @@
               <td class="fw-semibold text-dark ps-4">{{user.name}}</td>
               <td class="text-muted">{{user.email}}</td>
               <td class="text-muted"><span class="badge bg-light text-dark border">{{user.registration}}</span></td>
+              <td class="text-muted">{{user.unit || 'Sem unidade'}}</td>
               <td class="text-center">
                 <span class="badge rounded-pill px-3 py-2" [ngClass]="user.onVacation ? 'bg-warning-subtle text-warning' : 'bg-light text-muted'">
                   {{user.onVacation ? 'Sim' : 'Não'}}
@@ -74,7 +72,7 @@
               </td>
             </tr>
             <tr *ngIf="filteredUsers.length === 0">
-              <td colspan="7" class="text-center py-5 text-muted">Nenhum usuário encontrado.</td>
+              <td colspan="8" class="text-center py-5 text-muted">Nenhum usuário encontrado.</td>
             </tr>
           </tbody>
         </table>
@@ -104,11 +102,18 @@
               <label class="form-label text-muted small fw-semibold mb-1">E-mail</label>
               <input type="email" class="form-control rounded-3" [(ngModel)]="selectedUser.email" name="email">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label text-muted small fw-semibold mb-1">Matrícula</label>
               <input type="text" class="form-control rounded-3" [(ngModel)]="selectedUser.registration" name="registration">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <label class="form-label text-muted small fw-semibold mb-1">Unidade</label>
+              <select class="form-select rounded-3" [(ngModel)]="selectedUser.unit" name="unit">
+                <option value="" disabled>Selecione uma unidade...</option>
+                <option *ngFor="let unit of availableUnits" [value]="unit">{{unit}}</option>
+              </select>
+            </div>
+            <div class="col-md-4">
               <label class="form-label text-muted small fw-semibold mb-1">Status</label>
               <select class="form-select rounded-3" [(ngModel)]="selectedUser.active" name="active">
                 <option [ngValue]="true">Ativo</option>

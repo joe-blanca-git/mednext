@@ -17,7 +17,6 @@ export interface TimelineEvent {
 export interface Ticket {
   id: number;
   number: string; // Ex: A023
-  patientName: string;
   category: Category;
   unit: string;
   location: string;

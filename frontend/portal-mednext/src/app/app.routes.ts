@@ -42,7 +42,10 @@ export const routes: Routes = [
     },
     {
         path: 'panel',
-        //canActivate: [AuthGuardService],
         loadComponent: () => import('./features/modules/panel/pages/panel/panel.component').then(c => c.PanelComponent)
+    },
+    {
+        path: 'totem',
+        loadComponent: () => import('./features/modules/totem/pages/totem/totem.component').then(c => c.TotemComponent)
     }
 ];

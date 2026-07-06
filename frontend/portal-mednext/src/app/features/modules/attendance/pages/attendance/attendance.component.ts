@@ -26,11 +26,8 @@ export class AttendanceComponent implements OnInit {
   onHoldTickets: Ticket[] = [];
   finishedTickets: Ticket[] = [];
 
-  // Filtros
-  searchName: string = '';
-  searchNumber: string = '';
-  selectedCategory: string = '';
-  selectedUnit: string = '';
+  // Filtro
+  searchTerm: string = '';
 
   // Indicadores
   waitingCount = 0;
@@ -58,13 +55,17 @@ export class AttendanceComponent implements OnInit {
   }
 
   applyFilters() {
-    let filtered = this.tickets.filter(t => {
-      const matchName = !this.searchName || t.patientName.toLowerCase().includes(this.searchName.toLowerCase());
-      const matchNum = !this.searchNumber || t.number.toLowerCase().includes(this.searchNumber.toLowerCase());
-      const matchCat = !this.selectedCategory || t.category.name === this.selectedCategory;
-      const matchUnit = !this.selectedUnit || t.unit === this.selectedUnit;
-      return matchName && matchNum && matchCat && matchUnit;
-    });
+    let filtered = this.tickets;
+    
+    if (this.searchTerm) {
+      const lowerTerm = this.searchTerm.toLowerCase();
+      filtered = this.tickets.filter(t => 
+        t.number.toLowerCase().includes(lowerTerm) ||
+        t.unit.toLowerCase().includes(lowerTerm) ||
+        t.category.name.toLowerCase().includes(lowerTerm) ||
+        t.location.toLowerCase().includes(lowerTerm)
+      );
+    }
 
     this.waitingTickets = filtered.filter(t => t.status === 'WAITING');
     this.inProgressTickets = filtered.filter(t => t.status === 'IN_PROGRESS');
@@ -77,11 +78,8 @@ export class AttendanceComponent implements OnInit {
     this.finishedCount = this.finishedTickets.length;
   }
 
-  clearFilters() {
-    this.searchName = '';
-    this.searchNumber = '';
-    this.selectedCategory = '';
-    this.selectedUnit = '';
+  clearSearch() {
+    this.searchTerm = '';
     this.applyFilters();
   }
 
@@ -94,6 +92,10 @@ export class AttendanceComponent implements OnInit {
   callTicket(ticket: Ticket) {
     // Chamando a senha... vai para IN_PROGRESS e registra evento
     this.changeTicketStatus(ticket, 'IN_PROGRESS', 'Chamada', 'Paciente chamado ao painel.');
+  }
+
+  callTicketAgain(ticket: Ticket) {
+    this.changeTicketStatus(ticket, 'IN_PROGRESS', 'Nova Chamada', 'Paciente chamado novamente ao painel.');
   }
 
   startAttendance(ticket: Ticket) {
@@ -136,7 +138,6 @@ export class AttendanceComponent implements OnInit {
   }
 
   private generateMockTickets() {
-    const patients = ['João Silva', 'Maria Fernandes', 'Carlos Souza', 'Ana Paula', 'Roberta Lima', 'Felipe Santos', 'Juliana Alves', 'Marcos Castro', 'Sonia Machado', 'Lucas Pereira', 'Patrícia Gomes', 'Renata Vieira', 'Thiago Rocha', 'Bruna Mendes', 'Bruno Costa', 'Camila Nunes', 'Rodrigo Moreira', 'Amanda Teixeira', 'Diego Farias', 'Marina Dias'];
     const units = ['Centro', 'Zona Norte', 'Zona Sul', 'Leste'];
     const locations = ['Guichê 1', 'Guichê 2', 'Consultório 1', 'Recepção'];
     
@@ -159,7 +160,6 @@ export class AttendanceComponent implements OnInit {
       let ticket: Ticket = {
         id: i,
         number: `${cat.name.charAt(0).toUpperCase()}${i.toString().padStart(3, '0')}`,
-        patientName: patients[i % patients.length],
         category: cat,
         unit: units[i % units.length],
         location: locations[i % locations.length],

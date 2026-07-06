@@ -1,0 +1,93 @@
+// Totem Specific Styles
+.bg-light-modern {
+  background-color: #f4f6f9;
+}
+
+.totem-wrapper {
+  /* Impede zoom e scroll em dispositivos touch */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.tracking-tight {
+  letter-spacing: -0.05em;
+}
+
+.fw-black {
+  font-weight: 900;
+}
+
+.max-w-1200 {
+  max-width: 1200px;
+}
+
+.ticket-number {
+  font-size: 8rem;
+  line-height: 1;
+}
+
+// Interactivity
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.totem-card {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+  
+  &:active {
+    transform: scale(0.96);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+  }
+}
+
+.totem-btn {
+  transition: transform 0.1s ease;
+  
+  &:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+}
+
+// Stepper
+.step-indicator {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  color: #adb5bd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  transition: all 0.3s ease;
+  
+  &.active {
+    background-color: var(--bs-primary);
+    color: white;
+  }
+}
+
+.step-line {
+  height: 4px;
+  width: 50px;
+  background-color: #e9ecef;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  
+  &.active {
+    background-color: var(--bs-primary);
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}

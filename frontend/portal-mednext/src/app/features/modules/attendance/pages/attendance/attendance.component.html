@@ -1,11 +1,7 @@
 <div class="container-fluid px-4 py-4">
   
-  <!-- Header -->
-  <div class="d-flex justify-content-between align-items-center mb-4 animate-fade-in">
-    <div>
-      <h3 class="fw-bold mb-0 text-dark">Atendimento</h3>
-      <p class="text-muted mb-0">Gerencie os atendimentos e acompanhe a fila em tempo real.</p>
-    </div>
+  <!-- Header Actions -->
+  <div class="d-flex justify-content-end align-items-center mb-4 animate-fade-in">
     <div class="d-flex align-items-center">
       <span class="badge bg-success-subtle text-success border border-success-subtle me-3 py-2 px-3 rounded-pill">
         <i class="bi bi-circle-fill small me-1"></i> {{lastUpdated}}
@@ -16,97 +12,17 @@
     </div>
   </div>
 
-  <!-- Cards de Resumo -->
-  <div class="row g-4 mb-4">
-    <div class="col-12 col-md-6 col-xl-3 animate-fade-in" style="animation-delay: 0.1s;">
-      <div class="card hover-card h-100 p-3 rounded-4 border-0 shadow-sm">
-        <div class="d-flex justify-content-between align-items-start mb-3">
-          <div>
-            <h6 class="text-muted fw-semibold mb-1">Aguardando</h6>
-            <h2 class="fw-bold mb-0 text-dark">{{waitingCount}}</h2>
+  <!-- Search Bar -->
+  <div class="card border-0 shadow-sm rounded-4 mb-4 animate-fade-in" style="animation-delay: 0.1s;">
+    <div class="card-body p-3">
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6">
+          <div class="input-group input-group-lg">
+            <input type="text" class="form-control border-end-0" placeholder="Pesquisar por senha, unidade, categoria, local..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()">
+            <span class="input-group-text bg-white border-start-0" (click)="searchTerm ? clearSearch() : null" [style.cursor]="searchTerm ? 'pointer' : 'default'">
+              <i class="bi" [ngClass]="searchTerm ? 'bi-x-lg text-danger' : 'bi-search text-muted'"></i>
+            </span>
           </div>
-          <div class="icon-box bg-secondary-subtle text-secondary">
-            <i class="bi bi-people"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-6 col-xl-3 animate-fade-in" style="animation-delay: 0.1s;">
-      <div class="card hover-card h-100 p-3 rounded-4 border-0 shadow-sm">
-        <div class="d-flex justify-content-between align-items-start mb-3">
-          <div>
-            <h6 class="text-muted fw-semibold mb-1">Em Atendimento</h6>
-            <h2 class="fw-bold mb-0 text-dark">{{inProgressCount}}</h2>
-          </div>
-          <div class="icon-box bg-primary-subtle text-primary">
-            <i class="bi bi-person-video2"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-6 col-xl-3 animate-fade-in" style="animation-delay: 0.2s;">
-      <div class="card hover-card h-100 p-3 rounded-4 border-0 shadow-sm">
-        <div class="d-flex justify-content-between align-items-start mb-3">
-          <div>
-            <h6 class="text-muted fw-semibold mb-1">Em Espera</h6>
-            <h2 class="fw-bold mb-0 text-dark">{{onHoldCount}}</h2>
-          </div>
-          <div class="icon-box bg-warning-subtle text-warning">
-            <i class="bi bi-pause-circle"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-6 col-xl-3 animate-fade-in" style="animation-delay: 0.2s;">
-      <div class="card hover-card h-100 p-3 rounded-4 border-0 shadow-sm">
-        <div class="d-flex justify-content-between align-items-start mb-3">
-          <div>
-            <h6 class="text-muted fw-semibold mb-1">Finalizados Hoje</h6>
-            <h2 class="fw-bold mb-0 text-dark">{{finishedCount}}</h2>
-          </div>
-          <div class="icon-box bg-success-subtle text-success">
-            <i class="bi bi-check2-all"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Filtros -->
-  <div class="card border-0 shadow-sm rounded-4 mb-4 animate-fade-in" style="animation-delay: 0.3s;">
-    <div class="card-body p-4">
-      <div class="row g-3">
-        <div class="col-md-2">
-          <label class="form-label text-muted small fw-semibold">Senha</label>
-          <input type="text" class="form-control rounded-3" placeholder="Ex: A023" [(ngModel)]="searchNumber">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label text-muted small fw-semibold">Paciente</label>
-          <input type="text" class="form-control rounded-3" placeholder="Nome..." [(ngModel)]="searchName">
-        </div>
-        <div class="col-md-2">
-          <label class="form-label text-muted small fw-semibold">Categoria</label>
-          <select class="form-select rounded-3" [(ngModel)]="selectedCategory">
-            <option value="">Todas</option>
-            <option value="Normal">Normal</option>
-            <option value="Preferencial">Preferencial</option>
-            <option value="Urgência">Urgência</option>
-            <option value="Exames">Exames</option>
-          </select>
-        </div>
-        <div class="col-md-2">
-          <label class="form-label text-muted small fw-semibold">Unidade</label>
-          <select class="form-select rounded-3" [(ngModel)]="selectedUnit">
-            <option value="">Todas</option>
-            <option value="Centro">Centro</option>
-            <option value="Zona Norte">Zona Norte</option>
-            <option value="Zona Sul">Zona Sul</option>
-            <option value="Leste">Leste</option>
-          </select>
-        </div>
-        <div class="col-md-3 d-flex align-items-end gap-2">
-          <button class="btn btn-outline-secondary w-50 rounded-3" (click)="clearFilters()">Limpar</button>
-          <button class="btn btn-dark w-50 rounded-3" (click)="applyFilters()">Pesquisar</button>
         </div>
       </div>
     </div>
@@ -118,8 +34,8 @@
     <!-- Coluna Aguardando -->
     <div class="col-12 col-md-6 col-xl-3 d-flex flex-column h-100">
       <div class="kanban-header d-flex justify-content-between align-items-center mb-3 px-1">
-        <h6 class="fw-bold mb-0 text-secondary">Aguardando</h6>
-        <span class="badge bg-secondary rounded-pill">{{waitingCount}}</span>
+        <h6 class="fw-bold mb-0 text-dark">Aguardando</h6>
+        <span class="badge bg-dark rounded-pill">{{waitingCount}}</span>
       </div>
       <div class="kanban-column rounded-4 bg-light p-3 flex-grow-1">
         
@@ -130,14 +46,14 @@
               <span class="text-muted small"><i class="bi bi-clock me-1"></i> {{t.issueTime}}</span>
             </div>
             <h5 class="fw-bold mb-1 text-dark">{{t.number}}</h5>
-            <p class="text-muted small fw-semibold mb-2 text-truncate">{{t.patientName}}</p>
+
             <div class="d-flex justify-content-between text-muted small mb-3">
               <span><i class="bi bi-geo-alt"></i> {{t.unit}}</span>
               <span class="text-danger fw-semibold">{{t.waitingTimeMinutes}} min</span>
             </div>
             <div class="d-flex gap-2">
               <button class="btn btn-sm btn-outline-primary flex-grow-1 rounded-pill" (click)="callTicket(t)">Chamar</button>
-              <button class="btn btn-sm btn-light text-muted rounded-circle px-2" data-bs-toggle="offcanvas" data-bs-target="#ticketOffcanvas" (click)="viewTicket(t)" title="Visualizar">
+              <button class="btn btn-sm btn-light text-muted rounded-circle px-2" data-bs-toggle="modal" data-bs-target="#ticketModal" (click)="viewTicket(t)" title="Visualizar">
                 <i class="bi bi-eye"></i>
               </button>
             </div>
@@ -151,8 +67,8 @@
     <!-- Coluna Em Atendimento -->
     <div class="col-12 col-md-6 col-xl-3 d-flex flex-column h-100">
       <div class="kanban-header d-flex justify-content-between align-items-center mb-3 px-1">
-        <h6 class="fw-bold mb-0 text-primary">Em Atendimento</h6>
-        <span class="badge bg-primary rounded-pill">{{inProgressCount}}</span>
+        <h6 class="fw-bold mb-0 text-dark">Em Atendimento</h6>
+        <span class="badge bg-dark rounded-pill">{{inProgressCount}}</span>
       </div>
       <div class="kanban-column rounded-4 bg-light p-3 flex-grow-1">
         
@@ -163,16 +79,19 @@
               <span class="text-primary small fw-bold"><i class="bi bi-person-video2 me-1"></i> Agora</span>
             </div>
             <h5 class="fw-bold mb-1 text-dark">{{t.number}}</h5>
-            <p class="text-muted small fw-semibold mb-2 text-truncate">{{t.patientName}}</p>
+
             <div class="d-flex justify-content-between text-muted small mb-3">
               <span><i class="bi bi-door-open"></i> {{t.location}}</span>
             </div>
             <div class="d-flex gap-2">
               <button class="btn btn-sm btn-success flex-grow-1 rounded-pill" (click)="finishAttendance(t)">Finalizar</button>
+              <button class="btn btn-sm btn-primary rounded-circle px-2" (click)="callTicketAgain(t)" title="Chamar Novamente">
+                <i class="bi bi-volume-up-fill"></i>
+              </button>
               <button class="btn btn-sm btn-warning rounded-circle px-2 text-white" (click)="putOnHold(t)" title="Em Espera">
                 <i class="bi bi-pause-fill"></i>
               </button>
-              <button class="btn btn-sm btn-light text-muted rounded-circle px-2" data-bs-toggle="offcanvas" data-bs-target="#ticketOffcanvas" (click)="viewTicket(t)" title="Visualizar">
+              <button class="btn btn-sm btn-light text-muted rounded-circle px-2" data-bs-toggle="modal" data-bs-target="#ticketModal" (click)="viewTicket(t)" title="Visualizar">
                 <i class="bi bi-eye"></i>
               </button>
             </div>
@@ -186,8 +105,8 @@
     <!-- Coluna Em Espera -->
     <div class="col-12 col-md-6 col-xl-3 d-flex flex-column h-100">
       <div class="kanban-header d-flex justify-content-between align-items-center mb-3 px-1">
-        <h6 class="fw-bold mb-0 text-warning">Em Espera</h6>
-        <span class="badge bg-warning rounded-pill">{{onHoldCount}}</span>
+        <h6 class="fw-bold mb-0 text-dark">Em Espera</h6>
+        <span class="badge bg-dark rounded-pill">{{onHoldCount}}</span>
       </div>
       <div class="kanban-column rounded-4 bg-light p-3 flex-grow-1">
         
@@ -198,13 +117,13 @@
               <span class="text-warning small fw-bold"><i class="bi bi-pause-circle me-1"></i> Pausado</span>
             </div>
             <h5 class="fw-bold mb-1 text-dark">{{t.number}}</h5>
-            <p class="text-muted small fw-semibold mb-2 text-truncate">{{t.patientName}}</p>
+
             <div class="d-flex gap-2 mt-3">
               <button class="btn btn-sm btn-primary flex-grow-1 rounded-pill" (click)="resumeAttendance(t)">Retomar</button>
               <button class="btn btn-sm btn-outline-danger rounded-circle px-2" (click)="cancelTicket(t)" title="Cancelar">
                 <i class="bi bi-x-lg"></i>
               </button>
-              <button class="btn btn-sm btn-light text-muted rounded-circle px-2" data-bs-toggle="offcanvas" data-bs-target="#ticketOffcanvas" (click)="viewTicket(t)" title="Visualizar">
+              <button class="btn btn-sm btn-light text-muted rounded-circle px-2" data-bs-toggle="modal" data-bs-target="#ticketModal" (click)="viewTicket(t)" title="Visualizar">
                 <i class="bi bi-eye"></i>
               </button>
             </div>
@@ -218,8 +137,8 @@
     <!-- Coluna Finalizado -->
     <div class="col-12 col-md-6 col-xl-3 d-flex flex-column h-100">
       <div class="kanban-header d-flex justify-content-between align-items-center mb-3 px-1">
-        <h6 class="fw-bold mb-0 text-success">Finalizado</h6>
-        <span class="badge bg-success rounded-pill">{{finishedCount}}</span>
+        <h6 class="fw-bold mb-0 text-dark">Finalizado</h6>
+        <span class="badge bg-dark rounded-pill">{{finishedCount}}</span>
       </div>
       <div class="kanban-column rounded-4 bg-light p-3 flex-grow-1">
         
@@ -229,9 +148,9 @@
               <h5 class="fw-bold mb-0 text-dark">{{t.number}}</h5>
               <span class="text-success small fw-bold"><i class="bi bi-check2-all me-1"></i> Concluído</span>
             </div>
-            <p class="text-muted small fw-semibold mb-2 text-truncate">{{t.patientName}}</p>
+
             <div class="d-flex gap-2 mt-3">
-              <button class="btn btn-sm btn-light text-muted flex-grow-1 rounded-pill" data-bs-toggle="offcanvas" data-bs-target="#ticketOffcanvas" (click)="viewTicket(t)">Ver Detalhes</button>
+              <button class="btn btn-sm btn-light text-muted flex-grow-1 rounded-pill" data-bs-toggle="modal" data-bs-target="#ticketModal" (click)="viewTicket(t)">Ver Detalhes</button>
             </div>
           </div>
         </div>
@@ -243,63 +162,96 @@
   </div>
 </div>
 
-<!-- Offcanvas de Detalhes -->
-<div class="offcanvas offcanvas-end border-0 shadow" tabindex="-1" id="ticketOffcanvas" aria-labelledby="ticketOffcanvasLabel" style="width: 400px;">
-  <div class="offcanvas-header border-bottom pb-3">
-    <h5 class="offcanvas-title fw-bold" id="ticketOffcanvasLabel" *ngIf="selectedTicket">
-      Senha {{selectedTicket.number}}
-    </h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body" *ngIf="selectedTicket">
-    
-    <div class="mb-4">
-      <span class="badge {{selectedTicket.category.colorClass}} rounded-pill fw-semibold px-3 py-2 mb-3">
-        {{selectedTicket.category.name}}
-      </span>
-      <h6 class="text-muted small fw-semibold mb-1">Paciente</h6>
-      <p class="fw-bold text-dark fs-5 mb-3">{{selectedTicket.patientName}}</p>
-      
-      <div class="row g-3">
-        <div class="col-6">
-          <h6 class="text-muted small fw-semibold mb-1">Unidade</h6>
-          <p class="text-dark fw-medium mb-0"><i class="bi bi-building me-1"></i> {{selectedTicket.unit}}</p>
+<!-- Modal de Detalhes -->
+<div class="modal fade" tabindex="-1" id="ticketModal" aria-labelledby="ticketModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header border-bottom-0 pt-4 px-4 pb-0">
+        <div>
+          <h4 class="modal-title fw-bold text-dark mb-2" id="ticketModalLabel" *ngIf="selectedTicket">
+            Detalhes da Senha <span class="text-primary">{{selectedTicket.number}}</span>
+          </h4>
+          <span class="badge {{selectedTicket.category.colorClass}} rounded-pill fw-semibold px-3 py-1" *ngIf="selectedTicket">
+            {{selectedTicket.category.name}}
+          </span>
         </div>
-        <div class="col-6">
-          <h6 class="text-muted small fw-semibold mb-1">Local</h6>
-          <p class="text-dark fw-medium mb-0"><i class="bi bi-door-open me-1"></i> {{selectedTicket.location}}</p>
+        <button type="button" class="btn-close mb-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4" *ngIf="selectedTicket">
+        
+        <div class="row g-4">
+          <!-- Coluna Esquerda: Informações Principais -->
+          <div class="col-12 col-md-7">
+            
+            <div class="card bg-light border-0 rounded-4 p-4 mb-4">
+              <div class="row g-4">
+                <div class="col-6">
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <i class="bi bi-building text-muted"></i>
+                    <h6 class="text-muted small fw-semibold mb-0">Unidade</h6>
+                  </div>
+                  <p class="text-dark fw-bold mb-0 ps-4">{{selectedTicket.unit}}</p>
+                </div>
+                <div class="col-6">
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <i class="bi bi-door-open text-muted"></i>
+                    <h6 class="text-muted small fw-semibold mb-0">Local</h6>
+                  </div>
+                  <p class="text-dark fw-bold mb-0 ps-4">{{selectedTicket.location}}</p>
+                </div>
+                <div class="col-6">
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <i class="bi bi-activity text-muted"></i>
+                    <h6 class="text-muted small fw-semibold mb-0">Status Atual</h6>
+                  </div>
+                  <p class="text-dark fw-bold mb-0 ps-4">{{selectedTicket.status}}</p>
+                </div>
+                <div class="col-6">
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <i class="bi bi-clock-history text-muted"></i>
+                    <h6 class="text-muted small fw-semibold mb-0">Tempo de Espera</h6>
+                  </div>
+                  <p class="text-danger fw-bold mb-0 ps-4">{{selectedTicket.waitingTimeMinutes}} min</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card border border-warning-subtle bg-warning-subtle bg-opacity-10 rounded-4 p-3 mb-4 mb-md-0" *ngIf="selectedTicket.notes">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                <h6 class="text-warning fw-bold mb-0">Observações Extras</h6>
+              </div>
+              <p class="small mb-0 text-dark fw-medium">{{selectedTicket.notes}}</p>
+            </div>
+
+          </div>
+
+          <!-- Coluna Direita: Timeline -->
+          <div class="col-12 col-md-5 d-flex flex-column">
+            <h6 class="text-muted text-uppercase fw-bold mb-3 small">Histórico de Eventos</h6>
+            <div class="card border border-light shadow-sm rounded-4 p-4 flex-grow-1">
+              <ul class="timeline mb-0 p-0" style="list-style: none;">
+                <li class="timeline-item position-relative mb-4 ps-4" *ngFor="let event of selectedTicket.timeline; let last = last">
+                  <div class="position-absolute start-0 top-0 d-flex flex-column align-items-center" style="height: 100%;">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-white border border-2 {{event.colorClass || 'text-secondary'}}" style="width: 20px; height: 20px; z-index: 1;">
+                      <i class="bi {{event.icon || 'bi-circle-fill'}}" style="font-size: 0.55rem;"></i>
+                    </div>
+                    <div class="bg-secondary bg-opacity-25 flex-grow-1 mt-1" style="width: 2px;" *ngIf="!last"></div>
+                  </div>
+                  <div class="pb-2 ms-2">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="fw-bold text-dark small">{{event.title}}</span>
+                      <span class="badge bg-light text-muted border fw-semibold">{{event.time}}</span>
+                    </div>
+                    <p class="text-muted small mb-0">{{event.description}}</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="col-6">
-          <h6 class="text-muted small fw-semibold mb-1">Status Atual</h6>
-          <p class="text-dark fw-bold mb-0">{{selectedTicket.status}}</p>
-        </div>
-        <div class="col-6">
-          <h6 class="text-muted small fw-semibold mb-1">Espera</h6>
-          <p class="text-danger fw-bold mb-0">{{selectedTicket.waitingTimeMinutes}} min</p>
-        </div>
+
       </div>
     </div>
-
-    <div class="alert alert-light border rounded-3 p-3 mb-4" *ngIf="selectedTicket.notes">
-      <h6 class="text-muted small fw-bold mb-2"><i class="bi bi-info-circle me-1"></i> Observações</h6>
-      <p class="small mb-0 text-dark">{{selectedTicket.notes}}</p>
-    </div>
-
-    <hr class="text-muted">
-
-    <!-- Timeline -->
-    <h6 class="fw-bold mb-4 text-dark mt-4">Histórico do Atendimento</h6>
-    <ul class="timeline mb-0 p-0">
-      <li class="timeline-item" *ngFor="let event of selectedTicket.timeline">
-        <div class="timeline-icon bg-white {{event.colorClass || 'text-secondary'}} border">
-          <i class="bi {{event.icon || 'bi-circle-fill'}}"></i>
-        </div>
-        <div class="timeline-content">
-          <div class="fw-bold text-dark small mb-1">{{event.time}} - {{event.title}}</div>
-          <p class="text-muted small mb-0">{{event.description}}</p>
-        </div>
-      </li>
-    </ul>
-
   </div>
 </div>
